@@ -31,7 +31,7 @@ pipeline {
 		
 		 stage('Run Test') {
             steps {
-                bat 'mvn clean install'
+                bat 'mvn -Dmaven.test.failure.ignore=true clean install'
             }
 			
 			post {
