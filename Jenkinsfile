@@ -1,5 +1,10 @@
 pipeline {
     agent any
+	
+	 tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "Maven 3.8.6"
+    }
 
     stages {
         stage('Verify Tooling') {
@@ -10,11 +15,11 @@ pipeline {
             }
         }
         
-        stage('Prune Docker Data') {
-            steps {
-                bat '''docker system prune -a --volumes -f'''
-            }
-        }
+       // stage('Prune Docker Data') {
+       //     steps {
+       //         bat '''docker system prune -a --volumes -f'''
+       //     }
+       // }
         
         stage('Start Container') {
             steps {
@@ -23,6 +28,21 @@ pipeline {
             }
         }
 		
+		
+		 stage('Run Test') {
+            steps {
+                bat 'mvn clean install'
+            }
+			
+			post {
+                // If Maven was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
+                success {
+                    junit '**/test-output/junitreports/TEST-*.xml'
+                    archiveArtifacts 'target/*.jar'
+                }
+            }
+        }
 		 stage('Stop Container') {
             steps {
                 bat 'docker compose -f docker-compose-v3.yml down'
