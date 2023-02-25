@@ -33,7 +33,7 @@ public class AmazonURLTest extends TestBase{
 	{
 		driver.get("https://www.amazon.co.uk/");
 		String title= driver.getTitle();
-		Assert.assertEquals(title, "Amazon.co.uk: Low Prices in Electronics, Books, Sports Equipment & more");
+		Assert.assertEquals(title, "Amazon555.co.uk: Low Prices in Electronics, Books, Sports Equipment & more");
 	}
 
 	
